@@ -1,0 +1,132 @@
+---
+title: Storage
+---
+
+import { Steps } from 'nextra-theme-docs';
+import { Callout } from 'nextra/components';
+
+# dixxel - storage [qbx]
+
+<Callout type='warning'>
+  This script is released with ***most*** source code open, however ***all UI is built and not accessible for change***
+</Callout>
+
+The storage solution for all your players. Create storage centers anywhere you want and give your players the ability to stash away all their goods in new places. Released with most source code available to you, so that you can change and edit the way the script works for your server needs.
+
+This resource brings the option for you to create locations and units of your choosing. All built with the UI in focus. Change names, sizes, slots and really anything that would seem like it is needed for a storage unit. Comes with built in support for both a pincode system, or key system\*. All shareable with friends, but make sure that your pincode or key is not given to the wrong person...
+
+<Callout type='info'>
+  The **key system** is by default dependent on [ox_inventory](https://github.com/overextended/ox_inventory)
+</Callout>
+
+## Installation
+
+<Steps>
+  ### Install all resource dependencies
+  - [oxmysql](https://github.com/overextended/oxmysql)
+  - [ox_lib](https://github.com/overextended/ox_lib)
+
+### Download the newest release from keymaster
+
+- [keymaster](https://keymaster.fivem.net/)
+
+### Start script
+
+And just upload it to your server, start it, and watch the magic happend. This script _should_ handle all database creation on its own, so no need for a SQL file. Feel free to head into `shared/config.lua` and change it all to your liking.
+
+</Steps>
+
+## Config
+
+A lot of the main functions that you would want to edit for usage with other frameworks can be found in `*/framework.lua`. By default the script is setup to work with Qbox out of the box. But should also work with any QB framework in theory without any changes. If you need to further edit any files, most things should be reasonably easy to find and well documented with various parameters and returns in code.
+
+<Callout type='warning'>
+  **key / pincode system:** If you decide to change it after units have been bought you will manually have to create
+  keys / pincodes for all units
+</Callout>
+
+```bash
+shared/config.lua
+
+# Add a image that defaults to all units if no other one is specified
+TempImage = "https://placehold.co/215x100",
+
+# Change what target you use, or choose textui if none is used. These are by default setup, feel free to use any solution you want
+# Options: "textui" | "qb" | "ox"
+Target = "ox",
+
+# Change the type of currency used, this will tell the frontend how to format it properly.
+# https://en.wikipedia.org/wiki/ISO_4217#List_of_ISO_4217_currency_codes
+Currency = "GBP",
+
+# Specify the amount you get back when selling your storage unit, this value should be in percent (20 = 20% back of initial payment)
+Buyback = 20, -- percentage to get back on sale of unit
+
+# Choose how the script should be ran with either "key" or "pin"
+# Choose this wisely as it will not automatically handle both ways. If you decide to change you will manually have to create keys / pincodes for all units
+UnitAccess = "key", -- "key" or "pin"
+
+# Permissions to run functions in the admin menu
+Permissions = {
+	RemoveUnit = "admin",
+	EditPassword = "admin",
+},
+
+# Blip settings for the storage center
+Blip = {
+	sprite = 50,
+	scale = 0.55,
+	color = 2,
+},
+
+# Create locations (storage centers)
+# "name" has to be a unique identifier for the location
+Locations = {
+	{
+		coords = vector4(-61.16, -1218.15, 28.7, 264.85),
+		blip = true,
+		name = "city_storage",
+		label = "City Storage",
+	},
+},
+
+# Create units that are then used in the storage centers
+# "name" and "address" are more or less just for show
+# "location" is the the storage center defined above and each unit can only have a single location defined
+# "image" can be used to give the unit a unique image instead of temp one from before. Does not have to be specified
+# "price" is the price to buy the unit (once, no reccuring payments *yet*)
+# "slots" are used depending on inventory to define amount of slots available
+# "weight" is used depending on inventory to define total weight in unit
+Units = {
+	{
+		name = "Small Storage",
+		address = "Vinewood Self Storage",
+		location = "city_storage",
+		image = "https://placehold.co/215x100",
+		price = 100,
+		slots = 20,
+		weight = 20000,
+	},
+	{
+		name = "Medium Storage",
+		address = "Vinewood Self Storage",
+		location = "city_storage",
+		price = 100,
+		slots = 40,
+		weight = 40000,
+	},
+	{
+		name = "Large Storage",
+		address = "Vinewood Self Storage",
+		location = "city_storage",
+		price = 100,
+		slots = 80,
+		weight = 80000,
+	},
+},
+
+```
+
+## Commands
+
+This script comes with a admin comand `/storageunits` that will show **all** registered units. With this you can open, remove and edit pincode / create keys for any unit.
